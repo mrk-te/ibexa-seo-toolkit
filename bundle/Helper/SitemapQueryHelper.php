@@ -139,13 +139,18 @@ final class SitemapQueryHelper
             $criteria[] = new Criterion\Subtree($subtree->pathString);
         }
 
+        $contentTypeIdentifiersList = [];
         foreach ($contentTypeIdentifiers as $contentTypeIdentifier) {
             try {
                 $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
             } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
                 continue;
             }
-            $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
+            $contentTypeIdentifiersList[] = $contentTypeIdentifier;
+        }
+
+        if(!empty($contentTypeIdentifiersList)) {
+            $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeIdentifiersList);
         }
 
         return $criteria;
