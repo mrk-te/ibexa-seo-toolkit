@@ -6,6 +6,11 @@ services:
     _instanceof:
         Codein\IbexaSeoToolkit\Analysis\ParentAnalyzerInterface:
             tags: [ 'codein_ibexa_seo_toolkit.seo_analyzer.parent_interface' ]
+        Codein\IbexaSeoToolkit\Service\MetaResolver\MetaResolverInterface:
+            tags: [ 'codein_ibexa_seo_toolkit.meta_resolver' ]
+        Codein\IbexaSeoToolkit\DependencyInjection\Contracts\FieldHelper\FieldHelperAwareInterface:
+            calls:
+                - [ setFieldHelper, [ '@ezpublish.field_helper' ] ]
 
     Codein\IbexaSeoToolkit\Analysis\:
         resource: '../../Analysis/*'
@@ -71,3 +76,7 @@ services:
     Codein\IbexaSeoToolkit\Controller\SitemapController:
         arguments:
             $responseCacheConfigurator: '@ezplatform.view_cache.response_configurator'
+
+    Codein\IbexaSeoToolkit\Service\MetaResolver\MetaResolverService:
+        arguments:
+            $patternResolvers: !tagged_iterator { tag: codein_ibexa_seo_toolkit.meta_resolver }
